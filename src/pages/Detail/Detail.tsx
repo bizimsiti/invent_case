@@ -17,7 +17,6 @@ const Detail = (props: Props) => {
       dispatch(searchById(imdbId));
     }
   }, []);
-  console.log(imdbId);
   return (
     <div className="container-xl">
       <div className="row mt-5 p-5 border custom">

@@ -37,7 +37,6 @@ const Pagination = ({ totalResults }: Props) => {
     if (page === "...") {
       setCurrentPage(11);
     }
-    console.log(params, currentPage);
   };
   const handleClick = (direction: "prev" | "next") => {
     if (direction === "prev" && currentPage > 1) {
@@ -45,7 +44,6 @@ const Pagination = ({ totalResults }: Props) => {
     } else if (direction === "next" && currentPage < totalPage) {
       setCurrentPage((prev) => prev + 1);
     }
-    console.log(params);
   };
 
   return (

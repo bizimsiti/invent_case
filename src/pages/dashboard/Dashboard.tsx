@@ -25,7 +25,6 @@ const Dashboard = (props: Props) => {
   }, [params]);
 
   const goDetail = (e: React.MouseEvent<HTMLTableRowElement>) => {
-    console.log(e.currentTarget.dataset.imdbid);
     navigate(`detail/${e.currentTarget.dataset.imdbid}`);
   };
   return (

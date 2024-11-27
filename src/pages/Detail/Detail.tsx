@@ -1,15 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./style.scss";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/moviesHook";
 import { detailSelector, searchById } from "../../store/movieDetail/detailSlice";
 
-type Props = {};
-
-const Detail = (props: Props) => {
+const Detail = () => {
   const { imdbId } = useParams<string>();
-  const history = useNavigate();
   const dispatch = useAppDispatch();
   const detailMovie = useAppSelector(detailSelector);
   useEffect(() => {

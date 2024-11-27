@@ -1,24 +1,21 @@
 import { useSelector } from "react-redux";
 import "./style.scss";
 import { getMovies } from "../../store/movies/movieSlice";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/moviesHook";
 import { RootState } from "../../store/store";
-import { SearchParams } from "../../types/SearchParams";
 import Pagination from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
 import Form from "../../components/Form";
 import { paramsSelector } from "../../store/searchParams/paramsSlice";
-type Props = {};
 
-const Dashboard = (props: Props) => {
+const Dashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const params = useAppSelector(paramsSelector);
-  const [title, setTitle] = useState<string>("pokemon");
 
-  const { Search: movies, Response, totalResults } = useSelector((state: RootState) => state.movieReducer);
+  const { Search: movies, totalResults } = useSelector((state: RootState) => state.movieReducer);
 
   useEffect(() => {
     dispatch(getMovies(params));

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/moviesHook";
 import { getMovies } from "../store/movies/movieSlice";
-import { SearchParams } from "../types/SearchParams";
 import { paramsSelector } from "../store/searchParams/paramsSlice";
 
 type Props = {

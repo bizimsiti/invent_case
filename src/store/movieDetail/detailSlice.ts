@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import axios from "axios";
-import { SearchParams } from "../../types/SearchParams";
-import { BaseResponse } from "../../types/responseType";
+
 import { DetailMovie } from "../../types/Detail";
 
 const initialState: DetailMovie = {

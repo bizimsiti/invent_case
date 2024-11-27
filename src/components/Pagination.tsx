@@ -14,26 +14,29 @@ const Pagination = ({ totalResults, params }: Props) => {
   const totalPage = Math.ceil(Number(totalResults) / 10);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    const initialPages = [];
-    for (let i = 1; i <= Math.min(10, totalPage); i++) {
-      initialPages.push(i);
+    const arr = [];
+    for (let i = 1; i <= totalPage; i++) {
+      arr.push(i);
+      if (i === 10) {
+        arr.push("...");
+        arr.push(totalPage);
+        break;
+      }
     }
-    if (totalPage > 10) {
-      initialPages.push("...");
-      initialPages.push(totalPage); // Son sayfa eklenir
-    }
-    setVisiblePages(initialPages as number[]);
+    setVisiblePages(arr as number[]);
     setCurrentPage(1);
   }, [totalPage]);
+
+  useEffect(() => {
+    dispatch(getMovies({ ...params, page: currentPage.toString() }));
+  }, [currentPage]);
 
   const handleClickDot = (page: any) => {
     setCurrentPage(page);
     if (page === "...") {
-      console.log(visiblePages);
+      setCurrentPage(11);
     }
     console.log(params, currentPage);
-
-    dispatch(getMovies({ ...params, page: currentPage.toString() }));
   };
   const handleClick = (direction: "prev" | "next") => {
     if (direction === "prev" && currentPage > 1) {
@@ -46,15 +49,19 @@ const Pagination = ({ totalResults, params }: Props) => {
 
   return (
     <nav aria-label="Page navigation">
-      <ul className="pagination justify-content-end">
+      <ul className="pagination pagination-sm justify-content-end">
+        <li className="page-item active me-3">
+          <a id="previous" className={`page-link `}>
+            {currentPage}
+          </a>
+        </li>
         <li className="page-item">
           <a
             id="previous"
             onClick={() => handleClick("prev")}
             className={`page-link ${currentPage === 1 ? "disabled" : ""}`}
-            href="#"
           >
-            {currentPage === 1 ? "First Page" : "Previous"}
+            {currentPage === 1 ? "First" : "Previous"}
           </a>
         </li>
         {visiblePages.map((page) => (
@@ -69,9 +76,8 @@ const Pagination = ({ totalResults, params }: Props) => {
             id="next"
             onClick={() => handleClick("next")}
             className={`page-link ${currentPage === totalPage ? "disabled" : ""}`}
-            href="#"
           >
-            {currentPage === totalPage ? "Last Page" : "Next"}
+            {currentPage === totalPage ? "Last" : "Next"}
           </a>
         </li>
       </ul>

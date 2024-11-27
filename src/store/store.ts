@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import movieReducer from "./movies/movieSlice";
+import detailMovieReducer from "./movieDetail/detailSlice";
 export const store = configureStore({
   reducer: {
-    movieReducer
+    movieReducer,
+    detailMovieReducer
   }
 });
 export type AppDispatch = typeof store.dispatch;

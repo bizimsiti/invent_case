@@ -6,10 +6,13 @@ import { useAppDispatch } from "../../hooks/moviesHook";
 import { RootState } from "../../store/store";
 import { SearchParams } from "../../types/SearchParams";
 import Pagination from "../../components/Pagination";
+import { useNavigate } from "react-router-dom";
+import { Image } from "lucide-react";
 type Props = {};
 
 const Dashboard = (props: Props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [title, setTitle] = useState<string>("pokemon");
   const [params, setParams] = useState<SearchParams>({
     title,
@@ -38,7 +41,10 @@ const Dashboard = (props: Props) => {
     setParams(searchParams);
     dispatch(getMovies(searchParams));
   };
-
+  const goDetail = (e: React.MouseEvent<HTMLTableRowElement>) => {
+    console.log(e.currentTarget.dataset.imdbid);
+    navigate(`detail/${e.currentTarget.dataset.imdbid}`);
+  };
   return (
     <div className="border mt-5 p-4 container-xxl text-center">
       <div className="row">
@@ -69,6 +75,7 @@ const Dashboard = (props: Props) => {
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
                 name="year-search"
+                placeholder="search by year"
               />
             </div>
             <button type="submit" className="btn btn-primary">
@@ -84,21 +91,26 @@ const Dashboard = (props: Props) => {
                   Name
                 </th>
                 <th scope="col">Release Date</th>
-                <th scope="col">Genre</th>
-
+                <th className="d-none d-sm-table-cell" scope="col">
+                  Genre
+                </th>
+                <th scope="col">Imdb ID</th>
                 <th scope="col" className="d-none d-sm-table-cell">
-                  Imdb ID
+                  Poster
                 </th>
               </tr>
             </thead>
             <tbody>
               {movies &&
                 movies.map((movie) => (
-                  <tr>
+                  <tr role="button" data-imdbid={movie.imdbID} onClick={(e) => goDetail(e)}>
                     <th scope="row">{movie.Title}</th>
                     <td>{movie.Year}</td>
-                    <td>{movie.Type}</td>
-                    <td className="d-none d-sm-table-cell">{movie.imdbID}</td>
+                    <td className="d-none d-sm-table-cell">{movie.Type}</td>
+                    <td>{movie.imdbID}</td>
+                    <td className="d-none d-sm-table-cell">
+                      {movie.Poster === "N/A" ? <Image /> : <img width={50} src={movie.Poster} alt="" />}
+                    </td>
                   </tr>
                 ))}
             </tbody>

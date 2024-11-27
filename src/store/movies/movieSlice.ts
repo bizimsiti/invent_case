@@ -1,20 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import axios from "axios";
-import { Movie } from "../../types/Movie";
 import { SearchParams } from "../../types/SearchParams";
-import { BaseResponseType } from "../../types/responseType";
+import { BaseResponse } from "../../types/responseType";
 
-const initialState: Movie[] = [];
+const initialState: BaseResponse = {
+  Response: "",
+  Search: [],
+  totalResults: ""
+};
 
-export const searchById = createAsyncThunk("movies/searchById", async (params: SearchParams) => {
-  const { data } = await axios.get<BaseResponseType>(
-    `${import.meta.env.VITE_BASE_ENDPOINT}?s=${params.title}&y=${params.year}&t=${params.type}&apikey=${
-      import.meta.env.VITE_API_KEY
-    }`
+export const getMovies = createAsyncThunk("movies/getMovies", async (params: SearchParams) => {
+  const { data } = await axios.get<BaseResponse>(
+    `${import.meta.env.VITE_BASE_ENDPOINT}?s=${params.title}&y=${params.year}&type=${params.type}&page=${
+      params.page
+    }&apikey=${import.meta.env.VITE_API_KEY}`
   );
 
-  return data.Search;
+  return data;
 });
 
 const movieSlice = createSlice({
@@ -22,7 +25,7 @@ const movieSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(searchById.fulfilled, (state, action: PayloadAction<Movie[]>) => {
+    builder.addCase(getMovies.fulfilled, (state, action: PayloadAction<BaseResponse>) => {
       return action.payload;
     });
   }

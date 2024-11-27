@@ -1,7 +1,7 @@
 import { Movie } from "./Movie";
 
-export type BaseResponseType = {
+export type BaseResponse = {
   Response: string;
   Search: Movie[];
-  Totalresults: string;
+  totalResults: string;
 };

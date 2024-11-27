@@ -1,25 +1,27 @@
 import { useSelector } from "react-redux";
 import "./style.scss";
-import { searchById } from "../../store/movies/movieSlice";
-import { FormEvent, useEffect, useState } from "react";
+import { getMovies } from "../../store/movies/movieSlice";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useAppDispatch } from "../../hooks/moviesHook";
 import { RootState } from "../../store/store";
 import { SearchParams } from "../../types/SearchParams";
+import Pagination from "../../components/Pagination";
 type Props = {};
 
 const Dashboard = (props: Props) => {
   const dispatch = useAppDispatch();
-  const [title, setTitle] = useState<string>("Pokemon");
+  const [title, setTitle] = useState<string>("pokemon");
   const [params, setParams] = useState<SearchParams>({
-    title: "pokemon",
+    title,
     type: "movie",
-    year: ""
+    year: "",
+    page: "1"
   });
-  const movies = useSelector((state: RootState) => state.movieReducer);
+  const { Search: movies, Response, totalResults } = useSelector((state: RootState) => state.movieReducer);
 
   useEffect(() => {
-    dispatch(searchById(params));
-  }, []);
+    dispatch(getMovies(params));
+  }, [params]);
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -30,17 +32,19 @@ const Dashboard = (props: Props) => {
     const searchParams: SearchParams = {
       title,
       type,
-      year
+      year,
+      page: "1"
     };
-    dispatch(searchById(searchParams));
+    setParams(searchParams);
+    dispatch(getMovies(searchParams));
   };
+
   return (
     <div className="border mt-5 p-4 container-xxl text-center">
       <div className="row">
         <div className="col-md-12">
           <form onSubmit={handleSearch} className="d-flex col-md-8 gap-3">
             <div className="">
-              {" "}
               <input
                 type="text"
                 className="form-control shadow-none"
@@ -52,7 +56,6 @@ const Dashboard = (props: Props) => {
               />
             </div>
             <div className="">
-              {" "}
               <select name="type" className="form-select shadow-none text-center" aria-label="">
                 <option value="">All</option>
                 <option value="series">Tv Show</option>
@@ -60,7 +63,6 @@ const Dashboard = (props: Props) => {
               </select>
             </div>
             <div className="">
-              {" "}
               <input
                 type="text"
                 className="form-control shadow-none"
@@ -103,35 +105,7 @@ const Dashboard = (props: Props) => {
           </table>
         </div>
         <div className="col">
-          <nav aria-label="Page navigation">
-            <ul className="pagination justify-content-end">
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  Previous
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  1
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  2
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  3
-                </a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">
-                  Next
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <Pagination totalResults={totalResults} params={params} />
         </div>
       </div>
     </div>

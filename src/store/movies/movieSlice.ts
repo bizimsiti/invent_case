@@ -19,15 +19,36 @@ export const getMovies = createAsyncThunk("movies/getMovies", async (params: Sea
 
   return data;
 });
+export const getEpisodes = createAsyncThunk("movies/getEpisodes", async (params: SearchParams) => {
+  const { data } = await axios.get<BaseResponse>(
+    `${import.meta.env.VITE_BASE_ENDPOINT}?s=${params.title}&y=${params.year}&type=${params.type}&Season=${
+      params.season
+    }&Episode=${params.episode}&apikey=${import.meta.env.VITE_API_KEY}`
+  );
+  console.log(data);
+
+  return data;
+});
 
 const movieSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getMovies.fulfilled, (state, action: PayloadAction<BaseResponse>) => {
-      return action.payload;
-    });
+    builder.addMatcher(
+      (action) => action.type.startsWith("movies/"), // Aksiyon tipi 'movies/' ile başlıyorsa
+      (state, action: PayloadAction<BaseResponse>) => {
+        if (action.type === getMovies.fulfilled.type) {
+          state.Response = action.payload.Response;
+          state.Search = action.payload.Search;
+          state.totalResults = action.payload.totalResults;
+        } else if (action.type === getEpisodes.fulfilled.type) {
+          state.Response = action.payload.Response;
+          state.Search = action.payload.Search;
+          state.totalResults = action.payload.totalResults;
+        }
+      }
+    );
   }
 });
 

@@ -21,7 +21,7 @@ const Detail = (props: Props) => {
   return (
     <div className="container-xl">
       <div className="row mt-5 p-5 border custom">
-        <div className="col-md-4">
+        <div className="col-md-4 mb-5">
           <img src={detailMovie.Poster} alt="" />
         </div>
         <div className="col-md-4">

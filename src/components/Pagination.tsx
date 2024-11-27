@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../hooks/moviesHook";
+import { useAppDispatch, useAppSelector } from "../hooks/moviesHook";
 import { getMovies } from "../store/movies/movieSlice";
 import { SearchParams } from "../types/SearchParams";
+import { paramsSelector } from "../store/searchParams/paramsSlice";
 
 type Props = {
   totalResults: string;
-  params: SearchParams;
 };
 
-const Pagination = ({ totalResults, params }: Props) => {
+const Pagination = ({ totalResults }: Props) => {
+  const params = useAppSelector(paramsSelector);
   const [currentPage, setCurrentPage] = useState(1);
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const totalPage = Math.ceil(Number(totalResults) / 10);

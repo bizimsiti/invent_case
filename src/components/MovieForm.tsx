@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useState } from "react";
 import { SearchParams } from "../types/SearchParams";
 import { useAppDispatch, useAppSelector } from "../hooks/moviesHook";
-import { getMovies, getEpisodes } from "../store/movies/movieSlice";
+import { getMovies } from "../store/movies/movieSlice";
 import { paramsSelector, setParams } from "../store/searchParams/paramsSlice";
 
-const Form = () => {
+const MovieForm = () => {
   const dispatch = useAppDispatch();
   const params = useAppSelector(paramsSelector);
 
@@ -73,4 +73,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default MovieForm;

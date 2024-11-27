@@ -7,8 +7,9 @@ import { RootState } from "../../store/store";
 import Pagination from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
-import Form from "../../components/Form";
+import MovieForm from "../../components/MovieForm";
 import { paramsSelector } from "../../store/searchParams/paramsSlice";
+import { Movie } from "../../types/Movie";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -18,17 +19,22 @@ const Dashboard = () => {
   const { Search: movies, totalResults } = useSelector((state: RootState) => state.movieReducer);
 
   useEffect(() => {
+    console.log(totalResults);
+
     dispatch(getMovies(params));
   }, [params]);
 
   const goDetail = (e: React.MouseEvent<HTMLTableRowElement>) => {
     navigate(`detail/${e.currentTarget.dataset.imdbid}`);
   };
+
+  const isMovie = (movie: any): movie is Movie => "Poster" in movie;
+
   return (
     <div className="border mt-5 p-4 container-xxl text-center">
       <div className="row">
         <div className="col-md-12">
-          <Form />
+          <MovieForm />
         </div>
         <div className="col-md-12">
           <table className="table table-striped table-hover">
@@ -52,11 +58,15 @@ const Dashboard = () => {
                 movies.map((movie) => (
                   <tr role="button" data-imdbid={movie.imdbID} onClick={(e) => goDetail(e)}>
                     <th scope="row">{movie.Title}</th>
-                    <td>{movie.Year}</td>
-                    <td className="d-none d-sm-table-cell">{movie.Type}</td>
+                    <td>{isMovie(movie) ? movie.Year : movie.Released}</td>
+                    <td className="d-none d-sm-table-cell">{isMovie(movie) ? movie.Type : "N/A"}</td>
                     <td>{movie.imdbID}</td>
                     <td className="d-none d-sm-table-cell">
-                      {movie.Poster === "N/A" ? <Image /> : <img width={50} src={movie.Poster} alt="" />}
+                      {isMovie(movie) && movie.Poster !== "N/A" ? (
+                        <img width={50} src={movie.Poster} alt={movie.Title} />
+                      ) : (
+                        <Image />
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -3,28 +3,32 @@ import { RootState } from "../store";
 import axios from "axios";
 import { SearchParams } from "../../types/SearchParams";
 import { BaseResponse } from "../../types/responseType";
+import { BaseEpisodeResponse, Episode } from "../../types/Episode";
+import { Movie } from "../../types/Movie";
 
-const initialState: BaseResponse = {
+interface MovieState {
+  Response: string;
+  Search: Movie[] | Episode[];
+  totalResults: string;
+}
+
+const initialState: MovieState = {
   Response: "",
   Search: [],
   totalResults: ""
 };
-
 export const getMovies = createAsyncThunk("movies/getMovies", async (params: SearchParams) => {
-  const { data } = await axios.get<BaseResponse>(
-    `${import.meta.env.VITE_BASE_ENDPOINT}?s=${params.title}&y=${params.year}&type=${params.type}&page=${
+  let endPoint = "";
+  if (params.type === "episode") {
+    endPoint = `${import.meta.env.VITE_BASE_ENDPOINT}?t=${params.title}&Season=1&apikey=${
+      import.meta.env.VITE_API_KEY
+    }`;
+  } else {
+    endPoint = `${import.meta.env.VITE_BASE_ENDPOINT}?s=${params.title}&y=${params.year}&type=${params.type}&page=${
       params.page
-    }&apikey=${import.meta.env.VITE_API_KEY}`
-  );
-
-  return data;
-});
-export const getEpisodes = createAsyncThunk("movies/getEpisodes", async (params: SearchParams) => {
-  const { data } = await axios.get<BaseResponse>(
-    `${import.meta.env.VITE_BASE_ENDPOINT}?s=${params.title}&y=${params.year}&type=${params.type}&Season=${
-      params.season
-    }&Episode=${params.episode}&apikey=${import.meta.env.VITE_API_KEY}`
-  );
+    }&apikey=${import.meta.env.VITE_API_KEY}`;
+  }
+  const { data } = await axios.get<BaseResponse | BaseEpisodeResponse>(endPoint);
 
   return data;
 });
@@ -34,20 +38,17 @@ const movieSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(
-      (action) => action.type.startsWith("movies/"),
-      (state, action: PayloadAction<BaseResponse>) => {
-        if (action.type === getMovies.fulfilled.type) {
-          state.Response = action.payload.Response;
-          state.Search = action.payload.Search;
-          state.totalResults = action.payload.totalResults;
-        } else if (action.type === getEpisodes.fulfilled.type) {
-          state.Response = action.payload.Response;
-          state.Search = action.payload.Search;
-          state.totalResults = action.payload.totalResults;
-        }
+    builder.addCase(getMovies.fulfilled, (state, action: PayloadAction<BaseResponse | BaseEpisodeResponse>) => {
+      if ("Episodes" in action.payload) {
+        state.Response = action.payload.Response;
+        state.Search = action.payload.Episodes;
+        state.totalResults = action.payload.totalSeasons;
+      } else {
+        state.Response = action.payload.Response;
+        state.Search = action.payload.Search;
+        state.totalResults = action.payload.totalResults;
       }
-    );
+    });
   }
 });
 

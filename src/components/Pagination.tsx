@@ -57,6 +57,7 @@ const Pagination = ({ totalResults, params }: Props) => {
         </li>
         <li className="page-item">
           <a
+            role="button"
             id="previous"
             onClick={() => handleClick("prev")}
             className={`page-link ${currentPage === 1 ? "disabled" : ""}`}
@@ -73,6 +74,7 @@ const Pagination = ({ totalResults, params }: Props) => {
         ))}
         <li className="page-item">
           <a
+            role="button"
             id="next"
             onClick={() => handleClick("next")}
             className={`page-link ${currentPage === totalPage ? "disabled" : ""}`}

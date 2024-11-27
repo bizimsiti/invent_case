@@ -1,0 +1,13 @@
+.div {
+  .home {
+    background-color: red;
+  }
+}
+.circle {
+  $renk: #f2f2f2;
+  $size: 100px;
+  width: $size;
+  height: $size;
+  border-radius: $size * 0.5;
+  border: 4px solid $renk;
+}

@@ -33,13 +33,10 @@ const initialState: DetailMovie = {
   Response: ""
 };
 
-// https://www.omdbapi.com/?i=tt1201607&apikey=2fad3060
-
 export const searchById = createAsyncThunk("movies/detail", async (param: string) => {
   const { data } = await axios.get<DetailMovie>(
     `${import.meta.env.VITE_BASE_ENDPOINT}?i=${param}&apikey=${import.meta.env.VITE_API_KEY}`
   );
-  console.log(data);
 
   return data;
 });

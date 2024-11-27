@@ -25,7 +25,6 @@ export const getEpisodes = createAsyncThunk("movies/getEpisodes", async (params:
       params.season
     }&Episode=${params.episode}&apikey=${import.meta.env.VITE_API_KEY}`
   );
-  console.log(data);
 
   return data;
 });
@@ -36,7 +35,7 @@ const movieSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      (action) => action.type.startsWith("movies/"), // Aksiyon tipi 'movies/' ile başlıyorsa
+      (action) => action.type.startsWith("movies/"),
       (state, action: PayloadAction<BaseResponse>) => {
         if (action.type === getMovies.fulfilled.type) {
           state.Response = action.payload.Response;

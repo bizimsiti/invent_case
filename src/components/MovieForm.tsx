@@ -9,7 +9,6 @@ const MovieForm = () => {
   const params = useAppSelector(paramsSelector);
 
   const [title, setTitle] = useState<string>(params.title);
-  console.log("render");
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -32,9 +31,6 @@ const MovieForm = () => {
     dispatch(getMovies(searchParams));
     setTitle("");
   };
-  useEffect(() => {
-    dispatch(getMovies(params));
-  }, [params]);
 
   return (
     <form onSubmit={handleSearch} className="d-flex col-md-8 gap-3">

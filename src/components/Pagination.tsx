@@ -14,22 +14,25 @@ const Pagination = ({ totalResults }: Props) => {
   const totalPage = Math.ceil(Number(totalResults) / 10);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    const arr = [];
-    for (let i = 1; i <= totalPage; i++) {
-      arr.push(i);
-      if (i === 10) {
-        arr.push("...");
-        arr.push(totalPage);
-        break;
+    const calculateTotalPage = () => {
+      const arr = [];
+      for (let i = 1; i <= totalPage; i++) {
+        arr.push(i);
+        if (i === 10) {
+          arr.push("...");
+          arr.push(totalPage);
+          break;
+        }
       }
-    }
-    setVisiblePages(arr as number[]);
-    setCurrentPage(1);
+      setVisiblePages(arr as number[]);
+      setCurrentPage(1);
+    };
+    calculateTotalPage();
   }, [totalPage]);
 
   useEffect(() => {
     dispatch(getMovies({ ...params, page: currentPage.toString() }));
-  }, [currentPage]);
+  }, [currentPage, params, dispatch]);
 
   const handleClickDot = (page: any) => {
     setCurrentPage(page);

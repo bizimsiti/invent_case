@@ -1,28 +1,18 @@
 import { useSelector } from "react-redux";
 import "./style.scss";
-import { getMovies } from "../../store/movies/movieSlice";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/moviesHook";
+
 import { RootState } from "../../store/store";
 import Pagination from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
 import MovieForm from "../../components/MovieForm";
-import { paramsSelector } from "../../store/searchParams/paramsSlice";
+
 import { Movie } from "../../types/Movie";
 
 const Dashboard = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const params = useAppSelector(paramsSelector);
 
   const { Search: movies, totalResults } = useSelector((state: RootState) => state.movieReducer);
-
-  useEffect(() => {
-    console.log(totalResults);
-
-    dispatch(getMovies(params));
-  }, [params]);
 
   const goDetail = (e: React.MouseEvent<HTMLTableRowElement>) => {
     navigate(`detail/${e.currentTarget.dataset.imdbid}`);

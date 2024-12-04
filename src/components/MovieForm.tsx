@@ -8,7 +8,8 @@ const MovieForm = () => {
   const dispatch = useAppDispatch();
   const params = useAppSelector(paramsSelector);
 
-  const [title, setTitle] = useState<string>("pokemon");
+  const [title, setTitle] = useState<string>(params.title);
+  console.log("render");
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
